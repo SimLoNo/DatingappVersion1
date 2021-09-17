@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace DatingappVersion1
 {
@@ -13,7 +14,7 @@ namespace DatingappVersion1
         private string connString = @"Data Source=SIMONNGF2DATA\H2SQLSOMMERSIMON;Initial Catalog=datingdb;Integrated Security=True"; 
 
         // Foerste version af login funktionalitet, vil evt. proeve at opdele det i flere metoder, for mere genbrug.
-        public bool SearchLogin(string email, string password)
+        public DataTable SearchLogin(string email, string password)
         {
             SqlConnection conn = new SqlConnection(connString); // Opretter en sql forbindelse til serveren, med brug af den globale connection string.
             try
@@ -27,21 +28,24 @@ namespace DatingappVersion1
                 throw;
             }
 
-            string query = "SELECT COUNT(1) FROM account WHERE email = @email AND Password = @Password";
+            string query = "SELECT * FROM account WHERE email = @email AND Password = @Password";
             SqlCommand sqlCmd = new SqlCommand(query, conn);
             // Stjaalet kode for at sterilisere input, til at forhindre sql injection.
             sqlCmd.CommandType = System.Data.CommandType.Text;
             sqlCmd.Parameters.AddWithValue("@email", email);
             sqlCmd.Parameters.AddWithValue("@Password", password);
-            int count = Convert.ToInt32(sqlCmd.ExecuteScalar());
+            DataTable data = new DataTable(); // Laver en variable til at holde paa de oplysninger der bliver givet fra databasen.
+            SqlDataReader dataReader = sqlCmd.ExecuteReader(); // Laver en datareader der laeser fra databasen.
+            data.Load(dataReader); // Henter data fra databasen, og gemmer det i DataTable variablen.
+            dataReader.Close();
             conn.Close();
-            if(count == 1)
+            if(data.Rows.Count == 1) // Hvis der er fundet 1 raekke med passende vaerdier, saa findes brugeren, og brugerens informationer bliver returneret til den kaldende metode.
             {
-                return true;
+                return data;
             }
-            else
+            else // Hvis der er mere eller mindre end 1 raekke med de tilsvarende vaerdier, findes brugeren ikke, eller der er sket en alvorlig fejl i databasen, og en tom vaerdi bliver returneret.
             {
-                return false;
+                return new DataTable();
             }
             
         }
@@ -71,12 +75,33 @@ namespace DatingappVersion1
 
         }
 
-        public int CheckEmail(string email)
+        public int WriteDatabase(SqlCommand sqlCmd)
+        {
+            SqlConnection conn = OpenConnection();
+            sqlCmd.Connection = conn;
+            int rowsAffected = sqlCmd.ExecuteNonQuery(); //
+            return 1;
+        }
+
+        public SqlDataReader CheckEmail(string email)
         {
             SqlCommand query = new SqlCommand(@"SELECT COUNT(1) FROM account WHERE email = @email");
             query.Parameters.AddWithValue("@email", email);
-            int output = Convert.ToInt32(ReadDatabase(query));
+            SqlDataReader output = ReadDatabase(query);
             return output;
         }
+
+        public int InsertAccount(string email, string password, int phone)
+        {
+            SqlCommand query = new SqlCommand(@"INSERT INTO account VALUES(@email, @phone, @password, @createDate)");
+            query.Parameters.AddWithValue("@email", email);
+            query.Parameters.AddWithValue("@phone", phone);
+            query.Parameters.AddWithValue("@password", password);
+            query.Parameters.AddWithValue("@createDate", DateTime.Now.ToString("yyyy-MM-dd"));
+            int rowsAffected = WriteDatabase(query);
+            return rowsAffected;
+        }
+
+
     }
 }

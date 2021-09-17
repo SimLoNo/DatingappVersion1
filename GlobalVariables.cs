@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DatingappVersion1
 {
-    class CloseProgram
+    static class GlobalVariables
     {
-        public void ShutdownProgram()
-        {
-            GlobalVariables.runProgram = false;
-        }
+        public static Int16 selectedMenu { get; set; } = 0;
+        public static bool runProgram { get; set; } = true;
     }
 }

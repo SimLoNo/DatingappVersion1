@@ -19,13 +19,22 @@ namespace DatingappVersion1
         private DateTime BirthDate { get; set; }
         public void CreateAccountProcess()
         {
+            DatabaseConnection sqlDatabase = new DatabaseConnection();
             WriteEmail();
+            WritePassword();
+            WritePhone();
+            int rowsAffected = sqlDatabase.InsertAccount(Email, Password, Phone);
+            if (rowsAffected == 1)
+            {
+                Login loginNewAccount = new Login();
+                loginNewAccount.LoginProcess(Email, Password);
+            }
         }
 
         private void WriteEmail()
         {
             string email;
-            bool emailAvailable = true;
+            bool emailAvailable = false;
             do
             {
                 do
@@ -35,11 +44,14 @@ namespace DatingappVersion1
                     email = Console.ReadLine();
                 } while (email.Length < 5 || email.Length > 50);
                 DatabaseConnection databaseQuery = new DatabaseConnection();
-                int TestMsg = databaseQuery.CheckEmail(email);
-                //Convert.ToString(TestMsg.IsDBNull(0));
-                Console.WriteLine(TestMsg);
-                Console.ReadLine();
-            } while (emailAvailable);
+                SqlReaderConversion queryConverter = new SqlReaderConversion();
+                SqlDataReader output = databaseQuery.CheckEmail(email);
+                int identicalEmailsInDatabase = queryConverter.SelectCount(output);
+                if (identicalEmailsInDatabase == 0)
+                {
+                    emailAvailable = true;
+                }
+            } while (! emailAvailable);
             
             Email = email;
         }
@@ -50,6 +62,7 @@ namespace DatingappVersion1
             do
             {
                 Console.Clear();
+                Console.WriteLine("Email: " + Email);
                 Console.WriteLine("Indtast et kodeord, til brug ved logon.");
                 password = Console.ReadLine();
             } while (password.Length < 5 || password.Length > 20);
@@ -58,13 +71,15 @@ namespace DatingappVersion1
 
         private void WritePhone()
         {
+            bool isConvertible;
             int phone;
             do
             {
                 Console.Clear();
                 Console.WriteLine("Indtast dit telefonnummer, skriv 0 for ikke at angive.");
-                phone = Convert.ToInt32(Console.ReadLine());
-            } while (phone > 99999999 || (phone < 10000000 && phone != 0));
+                string input = Console.ReadLine();
+                isConvertible = int.TryParse(input, out phone );
+            } while (phone > 99999999 || (phone < 10000000 && phone != 0) || isConvertible == false);
             if(phone != 0)
             {
                 Phone = phone;

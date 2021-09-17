@@ -5,8 +5,7 @@ namespace DatingappVersion1
 {
     class Program
     {
-        public static Int16 selectedMenu { get; set; } = 0;
-        public static bool runProgram{ get; set; } = true;
+        
         static void Main(string[] args)
         {
             
@@ -14,7 +13,7 @@ namespace DatingappVersion1
             Int16 selected = 0;
             do
             {
-                selected = allMenu[selectedMenu].FillMenu(selected);
+                selected = allMenu[GlobalVariables.selectedMenu].FillMenu(selected);
                 do
                 {
 
@@ -30,13 +29,13 @@ namespace DatingappVersion1
                         selected++;
                         break;
                     case ConsoleKey.Enter:
-                        allMenu[selectedMenu].RunFunction(selected);
+                        allMenu[GlobalVariables.selectedMenu].RunFunction(selected);
                         selected = 0;
                         break;
                     default:
                         break;
                 }
-            } while (runProgram == true);
+            } while (GlobalVariables.runProgram == true);
         }
     }
 }
