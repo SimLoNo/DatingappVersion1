@@ -9,33 +9,34 @@ namespace DatingappVersion1
         static void Main(string[] args)
         {
             
-            List<Menu> allMenu = new() {new StartMenu(), new HomeMenu()};
+            
             Int16 selected = 0;
             do
             {
-                selected = allMenu[GlobalVariables.selectedMenu].FillMenu(selected);
+                selected = GlobalVariables.allMenu[GlobalVariables.SelectedMenu].FillMenu(selected);
                 do
                 {
-
+                    
                 } while (!Console.KeyAvailable);
-                ConsoleKey pressedKey = Console.ReadKey(true).Key;
+                selected = InputController.InputSelector(selected);
+                //ConsoleKey pressedKey = Console.ReadKey(true).Key;
 
-                switch (pressedKey)
-                {
-                    case ConsoleKey.UpArrow:
-                        selected--;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        selected++;
-                        break;
-                    case ConsoleKey.Enter:
-                        allMenu[GlobalVariables.selectedMenu].RunFunction(selected);
-                        selected = 0;
-                        break;
-                    default:
-                        break;
-                }
-            } while (GlobalVariables.runProgram == true);
+                //switch (pressedKey)
+                //{
+                //    case ConsoleKey.UpArrow:
+                //        selected--;
+                //        break;
+                //    case ConsoleKey.DownArrow:
+                //        selected++;
+                //        break;
+                //    case ConsoleKey.Enter:
+                //        allMenu[GlobalVariables.SelectedMenu].RunFunction(selected);
+                //        selected = 0;
+                //        break;
+                //    default:
+                //        break;
+                //}
+            } while (GlobalVariables.RunProgram == true);
         }
     }
 }

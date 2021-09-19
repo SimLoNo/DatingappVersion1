@@ -10,7 +10,7 @@ namespace DatingappVersion1
     {
         public void ShutdownProgram()
         {
-            GlobalVariables.runProgram = false;
+            GlobalVariables.RunProgram = false;
         }
     }
 }

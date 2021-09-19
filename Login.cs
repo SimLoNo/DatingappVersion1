@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace DatingappVersion1
 {
@@ -15,6 +16,16 @@ namespace DatingappVersion1
             string password = WritePassword();
             Console.Clear();
             VerifyLogin(email, password);
+            bool profileExist = CheckForProfile(GlobalVariables.LoggedUser.AccountId);
+            if (profileExist == true)
+            {
+                GlobalVariables.SelectedMenu = 1; // Skifter den viste menu til hovedmenuen.
+            }
+            else
+            {
+                CreateProfile profileCreation = new CreateProfile();
+                profileCreation.InitCreateProfile(GlobalVariables.LoggedUser.AccountId);
+            }
 
 
 
@@ -33,21 +44,17 @@ namespace DatingappVersion1
             if (numRows == 1)
             {
                 AccountModel user = new AccountModel(output);
-                // Saet email til en global email variable, til at holde programmet opdateret om man er logget ind ved visse funktionaliteter.
-                // Saet password til en global email variable, til at holde programmet opdateret om man er logget ind ved visse funktionaliteter.
-                // Evt. kald en metode der saetter en variable til at lokalt sige man er logget ind, og som i tidsintervaller verificere at man stadig er logget ind.
-                GlobalVariables.selectedMenu = 1;
+                GlobalVariables.LoggedUser = user; // Gemmer informationerne for brugeren.
+                //GlobalVariables.SelectedMenu = 1; // Skifter den viste menu til hovedmenuen.
             }
             else
             {
-                // nulstil global email variable.
-                // nulstil global password variable
-                // Evt. kald en metode der saetter en variable til at sige man ikke er logged ind.
+                GlobalVariables.SelectedMenu = 0;
+                GlobalVariables.LoggedUser = null;
                 Console.WriteLine("Email eller kodeord er forkert, tryk på en tast for at prøve igen.");
                 Console.WriteLine("Email: " + email);
                 Console.WriteLine("Kodeord: " + password);
                 Console.ReadKey(false);
-                GlobalVariables.selectedMenu = 0;
             }
         }
 
@@ -65,6 +72,22 @@ namespace DatingappVersion1
             Console.WriteLine("Kodeord");
             string Password = Console.ReadLine();
             return Password;
+        }
+
+        public bool CheckForProfile(int accountId)
+        {
+            DatabaseConnection SqlDatabase = new DatabaseConnection();
+            SqlDataReader output = SqlDatabase.CheckForProfile(accountId);
+            SqlReaderConversion sqlConverter = new SqlReaderConversion();
+            int countProfiles = sqlConverter.SelectCount(output);
+            if (countProfiles == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

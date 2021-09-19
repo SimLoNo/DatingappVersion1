@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatingappVersion1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,11 @@ namespace DatingappVersion1
 {
     static class GlobalVariables
     {
-        public static Int16 selectedMenu { get; set; } = 0;
-        public static bool runProgram { get; set; } = true;
+        public static Int16 SelectedMenu { get; set; } = 0;
+        public static bool RunProgram { get; set; } = true;
+        public static AccountModel LoggedUser { get; set; }
+
+        public static ProfileModel LoggedProfile { get; set; }
+        public static List<Menu> allMenu = new() { new StartMenu(), new HomeMenu(), new PostalMenu() };
     }
 }

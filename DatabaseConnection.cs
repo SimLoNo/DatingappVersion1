@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using DatingappVersion1.Models;
 
 namespace DatingappVersion1
 {
@@ -80,6 +81,7 @@ namespace DatingappVersion1
             SqlConnection conn = OpenConnection();
             sqlCmd.Connection = conn;
             int rowsAffected = sqlCmd.ExecuteNonQuery(); //
+            conn.Close();
             return 1;
         }
 
@@ -100,6 +102,29 @@ namespace DatingappVersion1
             query.Parameters.AddWithValue("@createDate", DateTime.Now.ToString("yyyy-MM-dd"));
             int rowsAffected = WriteDatabase(query);
             return rowsAffected;
+        }
+
+        public SqlDataReader CheckForProfile(int accountId)
+        {
+            SqlCommand query = new SqlCommand(@"SELECT COUNT(1) FROM profile WHERE accountId = @accountId");
+            query.Parameters.AddWithValue("@accountId", accountId);
+            SqlDataReader countProfiles = ReadDatabase(query);
+            return countProfiles;
+
+        }
+
+        public List<CityModel> GetCities()
+        {
+            SqlCommand query = new SqlCommand(@"SELECT * FROM city");
+            DataTable cityData = new DataTable();
+            SqlDataReader output = ReadDatabase(query);
+            cityData.Load(output);
+            output.Close();
+            SqlReaderConversion queryConverter = new SqlReaderConversion();
+            List<CityModel> citiesList = queryConverter.SelectCities(cityData);
+            return citiesList;
+            
+            
         }
 
 
