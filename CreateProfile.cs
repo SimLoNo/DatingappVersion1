@@ -20,9 +20,9 @@ namespace DatingappVersion1
             GlobalVariables.LoggedProfile = new ProfileModel();
             AccountId = accountId;
             WriteAlias();
+            SelectBirthDate();
             SelectPostal();
             SelectGender();
-
         }
 
         private void WriteAlias()
@@ -65,6 +65,16 @@ namespace DatingappVersion1
         private void SelectGender()
         {
             GlobalVariables.SelectedMenu = 3; // Saetter menuen til GenderMenu, saa brugeren kan vaelge deres koen.
+        }
+        // Paa tidspunkt af oprettelse af SelectBirthDate, er jeg ikke helt frisk paa at skulle lave inputvalidering.
+        // Saa det bliver nok ikke inkluderet i denne udgave.
+        private void SelectBirthDate()
+        {
+            DateTime birthDate;
+            Console.WriteLine("Indtast din fødselsdag i formatet YYYY-MM-DD");
+            string birthDateInput = Console.ReadLine();
+            birthDate = Convert.ToDateTime(birthDateInput);
+
         }
     }
 }
