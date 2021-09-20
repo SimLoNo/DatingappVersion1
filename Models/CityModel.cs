@@ -11,9 +11,10 @@ namespace DatingappVersion1.Models
     {
         public int Postal { get; set; }
         public string City { get; set; }
-        public CityModel(int postal, string City)
+        public CityModel(int postal, string city)
         {
-
+            Postal = postal;
+            City = city;
         }
     }
 

@@ -10,28 +10,31 @@ namespace DatingappVersion1
     class PostalMenu : Menu
     {
         public CityModel[] CityArray { get; set; }
-        public Int16 FillMenu(Int16 selected = 0, List<CityModel> citiesList = null)
+        public override Int16 FillMenu(Int16 selected = 0)
         {
-            selected = VerifySelected(selected, (short)citiesList.Count()); // tjekker om vaerdien i selected er indenfor de mulige valg, og retter det hvis det ikke er.
-            CityArray = citiesList.ToArray();
-            this.WritePostalMenu(CityArray, selected); // kalder en metode fra baseclass, der skriver selve menuen i konsol.
+            Console.WriteLine("Writing zip-codes!");
+            CityArray = GlobalVariables.AllCities.ToArray();
+            Console.WriteLine("CityArray: " + CityArray.ToString()) ;
+            Console.WriteLine("Global variable: " + GlobalVariables.AllCities.ToString());
+            selected = VerifySelected(selected, (short)CityArray.Count()); // tjekker om vaerdien i selected er indenfor de mulige valg, og retter det hvis det ikke er.
+            this.WritePostalMenu(selected); // kalder en metode fra baseclass, der skriver selve menuen i konsol.
             return selected;
         }
         public override void RunFunction(Int16 selected )
         {
-            GlobalVariables.LoggedProfile.Postal = CityArray[selected].Postal;
+            GlobalVariables.LoggedProfile.Postal = GlobalVariables.AllCities[selected].Postal;
         }
 
-        public void WritePostalMenu(CityModel[] options, Int16 selected)
+        public void WritePostalMenu(Int16 selected)
         {
             Console.Clear();
-            for (int i = 0; i < options.Length; i++)
+            for (int i = 0; i < CityArray.Length; i++)
             {
                 if (i == selected) // Hvis feltet i arrayet er det brugeren står på, bliver baggrunden groen, for at indikere til brugeren at den er valgt.
                 {
                     Console.BackgroundColor = ConsoleColor.Green;
                 }
-                Console.WriteLine(options[i].Postal + " a" + options[i].City);
+                Console.WriteLine(CityArray[i].Postal + " " + CityArray[i].City);
                 Console.BackgroundColor = ConsoleColor.Black; // Nulstiller baggrundsfarven til sort.
             }
         }

@@ -46,17 +46,18 @@ namespace DatingappVersion1
             List<CityModel> citiesList = new List<CityModel>();
             DatabaseConnection SqlDatabase = new DatabaseConnection();
             citiesList = SqlDatabase.GetCities();
+            GlobalVariables.AllCities = citiesList;
             PostalMenu selectPostal = new PostalMenu();
-            do
-            {
-                selectPostal.FillMenu(selected, citiesList);
-                do
-                {
+            //do
+            //{
+            //    selectPostal.FillMenu(selected, citiesList);
+            //    do
+            //    {
 
-                } while (!Console.KeyAvailable);
-                selected = InputController.InputSelector(selected);
+            //    } while (!Console.KeyAvailable);
+            //    selected = InputController.InputSelector(selected);
 
-            } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+            //} while (Console.ReadKey(true).Key != ConsoleKey.Enter);
 
         }
 

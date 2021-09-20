@@ -15,5 +15,7 @@ namespace DatingappVersion1
 
         public static ProfileModel LoggedProfile { get; set; }
         public static List<Menu> allMenu = new() { new StartMenu(), new HomeMenu(), new PostalMenu() };
+
+        public static List<CityModel> AllCities { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace DatingappVersion1
             do
             {
                 selected = GlobalVariables.allMenu[GlobalVariables.SelectedMenu].FillMenu(selected);
+                GlobalVariables.allMenu[GlobalVariables.SelectedMenu].FillMenu(selected);
                 do
                 {
                     
