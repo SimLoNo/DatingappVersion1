@@ -21,6 +21,7 @@ namespace DatingappVersion1
             AccountId = accountId;
             WriteAlias();
             SelectPostal();
+            SelectGender();
 
         }
 
@@ -41,13 +42,13 @@ namespace DatingappVersion1
 
         private void SelectPostal()
         {
-            Int16 selected = 0;
-            GlobalVariables.SelectedMenu = 2;
-            List<CityModel> citiesList = new List<CityModel>();
-            DatabaseConnection SqlDatabase = new DatabaseConnection();
-            citiesList = SqlDatabase.GetCities();
-            GlobalVariables.AllCities = citiesList;
-            PostalMenu selectPostal = new PostalMenu();
+            Int16 selected = 0; // Legacy?
+            GlobalVariables.SelectedMenu = 2; // Saetter menuen til postnummer menuen, saa brugeren kan vaelge postnummer fra en liste.
+            List<CityModel> citiesList = new List<CityModel>(); // Opretter en liste af postnummer model klassen, til at gemme postnumrene fra databasen.
+            DatabaseConnection SqlDatabase = new DatabaseConnection(); // Laver en forbindelse til databasen.
+            citiesList = SqlDatabase.GetCities(); // Henter postnumre fra databasen, og gemmer dem i den dertil oprettede liste.
+            GlobalVariables.AllCities = citiesList; // Gemmer all postnumrene i en global variable, saa de kan bruges af hele programmet. Kan Evt. merge denne og ovenstaende linje.
+            PostalMenu selectPostal = new PostalMenu(); // Legacy.
             //do
             //{
             //    selectPostal.FillMenu(selected, citiesList);
@@ -63,7 +64,7 @@ namespace DatingappVersion1
 
         private void SelectGender()
         {
-
+            GlobalVariables.SelectedMenu = 3; // Saetter menuen til GenderMenu, saa brugeren kan vaelge deres koen.
         }
     }
 }

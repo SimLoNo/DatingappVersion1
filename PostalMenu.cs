@@ -12,10 +12,7 @@ namespace DatingappVersion1
         public CityModel[] CityArray { get; set; }
         public override Int16 FillMenu(Int16 selected = 0)
         {
-            Console.WriteLine("Writing zip-codes!");
             CityArray = GlobalVariables.AllCities.ToArray();
-            Console.WriteLine("CityArray: " + CityArray.ToString()) ;
-            Console.WriteLine("Global variable: " + GlobalVariables.AllCities.ToString());
             selected = VerifySelected(selected, (short)CityArray.Count()); // tjekker om vaerdien i selected er indenfor de mulige valg, og retter det hvis det ikke er.
             this.WritePostalMenu(selected); // kalder en metode fra baseclass, der skriver selve menuen i konsol.
             return selected;
@@ -27,7 +24,7 @@ namespace DatingappVersion1
 
         public void WritePostalMenu(Int16 selected)
         {
-            Console.Clear();
+            //Console.Clear();
             for (int i = 0; i < CityArray.Length; i++)
             {
                 if (i == selected) // Hvis feltet i arrayet er det brugeren står på, bliver baggrunden groen, for at indikere til brugeren at den er valgt.
