@@ -22,7 +22,7 @@ namespace DatingappVersion1
                     break;
                 case ConsoleKey.Enter:
                     GlobalVariables.allMenu[GlobalVariables.SelectedMenu].RunFunction(selected);
-                    selected = 0;
+                    selected = 500;
                     break;
                 default:
                     break;

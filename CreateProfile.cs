@@ -17,12 +17,15 @@ namespace DatingappVersion1
         public int AccountId { get; set; }
         public void InitCreateProfile(int accountId)
         {
+            DatabaseConnection sqlDatabase = new DatabaseConnection();
             GlobalVariables.LoggedProfile = new ProfileModel();
             AccountId = accountId;
             WriteAlias();
             SelectBirthDate();
             SelectPostal();
             SelectGender();
+            sqlDatabase.UpdateProfile();
+            GlobalVariables.SelectedMenu = 1;
         }
 
         private void WriteAlias()
@@ -49,22 +52,36 @@ namespace DatingappVersion1
             citiesList = SqlDatabase.GetCities(); // Henter postnumre fra databasen, og gemmer dem i den dertil oprettede liste.
             GlobalVariables.AllCities = citiesList; // Gemmer all postnumrene i en global variable, saa de kan bruges af hele programmet. Kan Evt. merge denne og ovenstaende linje.
             PostalMenu selectPostal = new PostalMenu(); // Legacy.
-            //do
-            //{
-            //    selectPostal.FillMenu(selected, citiesList);
-            //    do
-            //    {
+            do
+            {
+                selectPostal.FillMenu(selected);
+                do
+                {
 
-            //    } while (!Console.KeyAvailable);
-            //    selected = InputController.InputSelector(selected);
+                } while (!Console.KeyAvailable);
+                selected = InputController.InputSelector(selected);
 
-            //} while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+            } while (GlobalVariables.LoggedProfile.Postal < 999 || GlobalVariables.LoggedProfile.Postal > 9999);
 
         }
 
         private void SelectGender()
         {
             GlobalVariables.SelectedMenu = 3; // Saetter menuen til GenderMenu, saa brugeren kan vaelge deres koen.
+            GenderMenu selectGender = new GenderMenu();
+            Int16 selected = 0;
+
+            do
+            {
+                selectGender.FillMenu(selected);
+                Console.WriteLine("Profile gender: " + GlobalVariables.LoggedProfile.Gender);
+                do
+                {
+
+                } while (!Console.KeyAvailable);
+                selected = InputController.InputSelector(selected);
+
+            } while (selected != 500);
         }
         // Paa tidspunkt af oprettelse af SelectBirthDate, er jeg ikke helt frisk paa at skulle lave inputvalidering.
         // Saa det bliver nok ikke inkluderet i denne udgave.
@@ -74,6 +91,11 @@ namespace DatingappVersion1
             Console.WriteLine("Indtast din fødselsdag i formatet YYYY-MM-DD");
             string birthDateInput = Console.ReadLine();
             birthDate = Convert.ToDateTime(birthDateInput);
+
+        }
+
+        private void PublishProfile()
+        {
 
         }
     }

@@ -22,9 +22,10 @@ namespace DatingappVersion1
         {
             switch (selected)
             {
-                case 2:
-                    CloseProgram shutdown = new CloseProgram();
-                    shutdown.ShutdownProgram();
+                case 0:
+                    break;
+                case 1:
+                    GlobalVariables.SelectedMenu = 4;
                     break;
                 default:
                     break;

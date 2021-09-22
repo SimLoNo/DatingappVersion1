@@ -19,11 +19,11 @@ namespace DatingappVersion1
         {
             if (selected == 0)
             {
-                GlobalVariables.LoggedProfile.Gender = false;
+                GlobalVariables.LoggedProfile.Gender = 0;
             }
             else
             {
-                GlobalVariables.LoggedProfile.Gender = true;
+                GlobalVariables.LoggedProfile.Gender = 1;
             }
         }
     }

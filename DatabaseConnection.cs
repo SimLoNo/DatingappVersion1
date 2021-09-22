@@ -115,7 +115,8 @@ namespace DatingappVersion1
 
         public List<CityModel> GetCities()
         {
-            SqlCommand query = new SqlCommand(@"SELECT * FROM city");
+            SqlCommand query = new SqlCommand("GetCity");
+            query.CommandType = CommandType.StoredProcedure;
             DataTable cityData = new DataTable();
             SqlDataReader output = ReadDatabase(query);
             cityData.Load(output);
@@ -125,6 +126,47 @@ namespace DatingappVersion1
             return citiesList;
             
             
+        }
+
+        public void UpdateProfile()
+        {
+            SqlDataReader output =  CheckForProfile(GlobalVariables.LoggedUser.AccountId);
+
+            SqlReaderConversion sqlConverter = new SqlReaderConversion();
+            int countProfiles = sqlConverter.SelectCount(output);
+
+            if (countProfiles == 0)
+            {
+                SqlCommand query = new SqlCommand(@"INSERT INTO profile VALUES(@alias, @postal, @gender, @birthDate, @accountId)");
+                query.Parameters.AddWithValue("@alias", GlobalVariables.LoggedProfile.Alias);
+                query.Parameters.AddWithValue("@postal", GlobalVariables.LoggedProfile.Postal);
+                query.Parameters.AddWithValue("@gender", GlobalVariables.LoggedProfile.Gender);
+                query.Parameters.AddWithValue("@birthDate", GlobalVariables.LoggedProfile.BirthDate.ToString("yyyy-MM-dd"));
+                query.Parameters.AddWithValue("@accountId", GlobalVariables.LoggedUser.AccountId);
+                WriteDatabase(query);
+            }
+            else
+            {
+                SqlCommand query = new SqlCommand(@"UPDATE profile SET alias = @alias, postal = @postal, gender = @gender, birthDate = @birthDate WHERE accountId = @accountId");
+                query.Parameters.AddWithValue("@alias", GlobalVariables.LoggedProfile.Alias);
+                query.Parameters.AddWithValue("@postal", GlobalVariables.LoggedProfile.Postal);
+                query.Parameters.AddWithValue("@gender", GlobalVariables.LoggedProfile.Gender);
+                query.Parameters.AddWithValue("@birthDate", GlobalVariables.LoggedProfile.BirthDate.ToString("yyyy-MM-dd"));
+                query.Parameters.AddWithValue("@accountId", GlobalVariables.LoggedUser.AccountId);
+                WriteDatabase(query);
+            }
+        }
+
+        public DataTable FindDates(int gender)
+        {
+            SqlCommand query = new SqlCommand("FindDates");
+            query.Parameters.AddWithValue("@gender", gender);
+            query.CommandType = CommandType.StoredProcedure;
+            SqlDataReader output = ReadDatabase(query);
+            DataTable profileData = new DataTable();
+            profileData.Load(output);
+            output.Close();
+            return profileData;
         }
 
 

@@ -24,7 +24,7 @@ namespace DatingappVersion1
 
         public void WritePostalMenu(Int16 selected)
         {
-            //Console.Clear();
+            Console.Clear();
             for (int i = 0; i < CityArray.Length; i++)
             {
                 if (i == selected) // Hvis feltet i arrayet er det brugeren står på, bliver baggrunden groen, for at indikere til brugeren at den er valgt.

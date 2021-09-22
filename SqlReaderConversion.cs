@@ -32,5 +32,22 @@ namespace DatingappVersion1
             }
             return citiesList;
         }
+
+        public List<ProfileModel> FindDates(DataTable output)
+        {
+            SqlReaderConversion dataConverter = new SqlReaderConversion();
+            List<ProfileModel> profilesList = new List<ProfileModel>();
+            foreach (DataRow row in output.Rows)
+            {
+                string alias = row["alias"].ToString();
+                int postal = Convert.ToInt32(row["postal"]);
+                string cityName = row["city"].ToString();
+                Int16 gender = Convert.ToInt16(row["gender"]);
+                DateTime birthDate = Convert.ToDateTime(row["birthDate"]);
+                ProfileModel profile = new ProfileModel(alias, gender, postal, cityName, birthDate);
+                profilesList.Add(profile);
+            }
+            return profilesList;
+        }
     }
 }

@@ -15,17 +15,21 @@ namespace DatingappVersion1
             string email = WriteEmail();
             string password = WritePassword();
             Console.Clear();
-            VerifyLogin(email, password);
-            bool profileExist = CheckForProfile(GlobalVariables.LoggedUser.AccountId);
-            if (profileExist == true)
+            bool isLogged = VerifyLogin(email, password);
+            if (isLogged == true)
             {
-                GlobalVariables.SelectedMenu = 1; // Skifter den viste menu til hovedmenuen.
+                bool profileExist = CheckForProfile(GlobalVariables.LoggedUser.AccountId);
+                if (profileExist == true)
+                {
+                    GlobalVariables.SelectedMenu = 1; // Skifter den viste menu til hovedmenuen.
+                }
+                else
+                {
+                    CreateProfile profileCreation = new CreateProfile();
+                    profileCreation.InitCreateProfile(GlobalVariables.LoggedUser.AccountId);
+                }
             }
-            else
-            {
-                CreateProfile profileCreation = new CreateProfile();
-                profileCreation.InitCreateProfile(GlobalVariables.LoggedUser.AccountId);
-            }
+            
 
 
 
@@ -36,7 +40,7 @@ namespace DatingappVersion1
             VerifyLogin(email, password);
         }
 
-        public void VerifyLogin(string email, string password)
+        public bool VerifyLogin(string email, string password)
         {
             DatabaseConnection sqlDatabase = new DatabaseConnection();
             DataTable output = sqlDatabase.SearchLogin(email, password);
@@ -46,6 +50,7 @@ namespace DatingappVersion1
                 AccountModel user = new AccountModel(output);
                 GlobalVariables.LoggedUser = user; // Gemmer informationerne for brugeren.
                 //GlobalVariables.SelectedMenu = 1; // Skifter den viste menu til hovedmenuen.
+                return true;
             }
             else
             {
@@ -55,6 +60,7 @@ namespace DatingappVersion1
                 Console.WriteLine("Email: " + email);
                 Console.WriteLine("Kodeord: " + password);
                 Console.ReadKey(false);
+                return false;
             }
         }
 
